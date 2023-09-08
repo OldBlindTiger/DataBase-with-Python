@@ -11,11 +11,11 @@ from sqlalchemy.exc import OperationalError  # Додана операційна
 
 # =====================================================================================
 dict_params = {
-	"host": "10.160.10.10", 
-	"port": "5432", 
-	"database": "db_pg_test", 
-	"user": "postgres", 
-	"password": "1234567"
+    "host": "10.160.10.10", 
+    "port": "5432", 
+    "database": "db_pg_test", 
+    "user": "postgres", 
+    "password": "1234567"
 }
 
 def connector():
