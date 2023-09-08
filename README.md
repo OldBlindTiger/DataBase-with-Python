@@ -1,13 +1,11 @@
 # DataBase-with-Python
-Приклади створення engine для різних видів підключення, до різних типів БД
+Приклади створення **engine** для різних видів підключення, до різних типів БД
 
 ## PostgreSQL
 * Підключення напряму до хоста з БД
 ```python
-import pandas as pd
 import psycopg2
 from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError  # Додана операційна помилка
 
 # =====================================================================================
 dict_params = {
@@ -22,17 +20,36 @@ def connector():
     return psycopg2.connect(**dict_params)
 
 engine = create_engine('postgresql+psycopg2://', creator=connector)
+```
 
-...
-# Перевірка конекту
-try:
-    connection = soc_proc.engine.connect()
-except OperationalError as e:
-    print(f'[ERROR] Помилка при спробі підключитися до бази даних:\n{str(e)}')
-    return -1
-connection.close()
+## MySQL
+* Підключення напряму до хоста з БД
+* Підключення через SSH-тунель
 
-...
+## Перевірка підключення до БД за допомогою **engine**
+```python
+from sqlalchemy.exc import OperationalError  # Додана операційна помилка
+
+def run_script():
+	path_name = os.path.dirname(__file__)
+
+	# Перевірка конекту
+	try:
+    	connection = soc_proc.engine.connect()
+	except OperationalError as e:
+    	print(f'[ERROR] Помилка при спробі підключитися до бази даних:\n{str(e)}')
+    	return -1
+	connection.close()
+	return 1
+
+if __name__ == '__main__':
+	run_script()
+```
+
+## Вибірка даних у DataFrame за допомогою SQL-запиту
+```python
+import pandas as pd
+
 # Відбір даних у DataFrame за допомогою SQL-запиту
 sSQL = """
 SELECT *
@@ -43,6 +60,3 @@ LIMIT 5
 df_soc_proc = pd.read_sql_query(sSQL, engine)
 ```
 
-## MySQL
-* Підключення напряму до хоста з БД
-* Підключення через SSH-тунель
