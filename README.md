@@ -26,10 +26,10 @@ engine = create_engine('postgresql+psycopg2://', creator=connector)
 ...
 # Перевірка конекту
 try:
-	connection = soc_proc.engine.connect()
+    connection = soc_proc.engine.connect()
 except OperationalError as e:
-	print(f'[ERROR] Помилка при спробі підключитися до бази даних:\n{str(e)}')
-	return -1
+    print(f'[ERROR] Помилка при спробі підключитися до бази даних:\n{str(e)}')
+    return -1
 connection.close()
 
 ...
