@@ -31,19 +31,20 @@ engine = create_engine('postgresql+psycopg2://', creator=connector)
 from sqlalchemy.exc import OperationalError  # Додана операційна помилка
 
 def run_script():
-	path_name = os.path.dirname(__file__)
+    path_name = os.path.dirname(__file__)
 
-	# Перевірка конекту
-	try:
-    	connection = soc_proc.engine.connect()
-	except OperationalError as e:
-    	print(f'[ERROR] Помилка при спробі підключитися до бази даних:\n{str(e)}')
-    	return -1
-	connection.close()
-	return 1
+    # Перевірка конекту
+    try:
+        connection = soc_proc.engine.connect()
+    except OperationalError as e:
+        print(f'[ERROR] Помилка при спробі підключитися до бази даних:\n{str(e)}')
+        return -1
+
+    connection.close()
+    return 1
 
 if __name__ == '__main__':
-	run_script()
+    run_script()
 ```
 
 ## Вибірка даних у DataFrame за допомогою SQL-запиту
