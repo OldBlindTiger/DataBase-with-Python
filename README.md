@@ -24,6 +24,26 @@ engine = create_engine('postgresql+psycopg2://', creator=connector)
 
 ## MySQL
 * Підключення напряму до хоста з БД
+```python
+# py -m pip install pymysql
+import pymysql
+from sqlalchemy import create_engine
+
+# =====================================================================================
+dict_params = {
+	'host': '10.160.10.10',
+	'db': 'db_mysql_test',
+	'user': 'admin',
+	'password': '1234567',
+	'charset': 'utf8mb4'
+}
+
+def connector():
+    return pymysql.connect(**dict_params)
+
+engine = create_engine("mysql+pymysql://", creator=connector)
+```
+
 * Підключення через SSH-тунель
 
 ## Перевірка підключення до БД за допомогою **engine**
