@@ -45,6 +45,56 @@ engine = create_engine("mysql+pymysql://", creator=connector)
 ```
 
 * Підключення через SSH-тунель
+```python
+import pymysql
+from sshtunnel import SSHTunnelForwarder
+from sqlalchemy import create_engine, pool
+
+# -------------------------------------------------------------------------------------
+# Налаштування SSH тунелю
+ssh_host = '10.160.10.10'
+ssh_port = 22
+ssh_username = 'admin'
+ssh_password = '12345678'
+
+# -------------------------------------------------------------------------------------
+# Налаштування підключення до бази даних MySQL
+mysql_host = 'localhost'  # SSH тунель перенаправляє на цей хост
+mysql_port = 3306  # порт MySQL сервера
+mysql_username = 'user_local'
+mysql_password = '87654321'
+mysql_db = 'db_mysl_ssh_test'
+
+# =====================================================================================
+# Функція для створення з'єднань з базою даних через SSH тунель
+# =====================================================================================
+def create_mysql_connection():
+    tunnel = SSHTunnelForwarder(
+        (ssh_host, ssh_port),
+        ssh_username=ssh_username,
+        ssh_password=ssh_password,
+        remote_bind_address=(mysql_host, mysql_port)
+    )
+    tunnel.start()
+    
+    connection = pymysql.connect(
+        host=mysql_host,
+        port=tunnel.local_bind_port,
+        user=mysql_username,
+        password=mysql_password,
+        db=mysql_db
+    )
+    
+    return connection
+
+# -------------------------------------------------------------------------------------
+# Створення SQLAlchemy engine з використанням pool.QueuePool та власного creator
+engine = create_engine(
+    f"mysql+pymysql://{mysql_username}:{mysql_password}@localhost:{mysql_port}/{mysql_db}",
+    poolclass=pool.QueuePool,
+    creator=create_mysql_connection
+)
+```
 
 ## Перевірка підключення до БД за допомогою **engine**
 ```python
